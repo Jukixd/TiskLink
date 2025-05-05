@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tisk Link</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <Header>
+        <h1>Tisk link</h1>
+    </Header>
+    <div class="uplod">
+        <h1>Upload G-code File</h1>
+        <form id="gcodeForm">
+            <input type="file" id="gcodeFile" accept=".gcode" required>
+            <button type="submit">Send to Printer</button>
+        </form>
+    <div>
+
+    <script>
+        const form = document.getElementById('gcodeForm');
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const file = document.getElementById('gcodeFile').files[0];
+            if (file) {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (response.ok) {
+                    alert('File sent to printer!');
+                } else {
+                    const data = await response.json();
+                    alert(data.error || 'Failed to send file.');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
