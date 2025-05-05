@@ -16,8 +16,10 @@
             <input type="file" id="gcodeFile" accept=".gcode" required>
             <button type="submit">Send to Printer</button>
         </form>
-    <div>
+        <a href="{{ url_for('login') }}" class="back-button">Přihlásit se</a>
 
+       
+    <div>
     <script>
         const form = document.getElementById('gcodeForm');
         form.addEventListener('submit', async (event) => {

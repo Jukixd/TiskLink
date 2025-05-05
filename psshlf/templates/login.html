@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <title>Přihlášení</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <Header>
+        <h1>Přihlášení</h1>
+    </Header>
+
+    <div class="uplod">
+        <form method="post">
+            {% if error %}
+                <div class="alert error">{{ error }}</div>
+            {% endif %}
+            <input type="text" name="username" placeholder="Uživatelské jméno" required>
+            <input type="password" name="password" placeholder="Heslo" required>
+            <button type="submit">Přihlásit</button>
+        </form>
+        <a href="{{ url_for('index') }}" class="back-button">← Zpět na hlavní stránku</a>
+    </div>
+</body>
+</html>

@@ -115,3 +115,125 @@ footer {
     color: #777;
     margin-top: 30px;
 }
+
+input[type="text"],
+input[type="password"] {
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 1rem;
+    width: 100%;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    background-color: #fafafa;
+}
+
+.back-button {
+    margin-top: 20px;
+    text-decoration: none;
+    font-size: 1rem;
+    color: #3498db;
+    transition: color 0.2s ease;
+}
+
+.back-button:hover {
+    color: #1c5980;
+}
+
+
+.notification {
+    background-color: #f0ad4e;
+    color: white;
+    padding: 10px;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    border-radius: 5px;
+    display: none;
+    z-index: 9999;
+}
+
+.uplod {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 20px;
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+
+.job-list-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    height: 400px; 
+    overflow-y: auto; 
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: white;
+}
+
+.job {
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.job.waiting {
+    background-color: #f9f9b1; 
+    border-left:5px solid yellow ;
+}
+
+.job.confirmed {
+    background-color: #d4edda; 
+    border-left: 5px solid green;
+}
+
+.job.cancelled {
+    background-color: #f8d7da;
+    border-left: 5px solid red;
+}
+
+.job.failed {
+    background-color: #f8d7da;
+    border-left: 5px solid red;
+}
+
+.job button {
+    margin-top: 10px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.job button.confirm-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.job button.cancel-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+
+.job.waiting {
+    animation: waitingAnimation 0.3s ease-out;
+}
+
+@keyframes waitingAnimation {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+
+ 

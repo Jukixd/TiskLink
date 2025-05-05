@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <title>Uživatelský panel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    
+</head>
+<body>
+
+    <header>
+        <h1>Uživatelský panel</h1>
+    </header>
+
+    
+    <div id="notification" class="notification"></div>
+
+    <div class="uplod">
+        <h2>Čekající požadavky na tisk</h2>
+
+        <div class="job-list-container">
+            {% for job in print_queue %}
+                <div class="job {% if job.status == 'waiting' %}waiting{% elif job.status == 'confirmed' %}confirmed{% elif job.status == 'cancelled' %}cancelled{% elif job.status == 'failed' %}failed{% endif %}" data-job-index="{{ loop.index0 }}">
+                    <p><strong>Soubor:</strong> {{ job.filename }}</p>
+                    <p><strong>Status:</strong> {{ job.status }}</p>
+
+                    {% if job.status == 'waiting' %}
+                        <button class="confirm-btn" data-job="{{ loop.index0 }}">Potvrdit tisk</button>
+                        <button class="cancel-btn" data-job="{{ loop.index0 }}">Zrušit tisk</button>
+                    {% elif job.status == 'confirmed' %}
+                        <p>Čeká na tisk...</p>
+                    {% elif job.status == 'completed' %}
+                        <p>Tisk dokončen!</p>
+                    {% elif job.status == 'cancelled' %}
+                        <p>Požadavek byl zrušen.</p>
+                    {% elif job.status == 'failed' %}
+                        <p>Požadavek selhal.</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <a href="{{ url_for('index') }}" class="back-button">← Zpět na hlavní stránku</a>
+
+    <script>
+        function showNotification(message, isError) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.backgroundColor = isError ? '#d9534f' : '#5bc0de';
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 5000);
+        }
+
+        document.querySelectorAll('.confirm-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const jobIndex = this.getAttribute('data-job');
+                fetch(`/confirm_print/${jobIndex}`, {
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        showNotification(data.error, true);
+                    } else {
+                        showNotification(data.message, false);
+              
+                        this.parentElement.classList.remove('waiting');
+                        this.parentElement.classList.add('confirmed');
+                        this.parentElement.querySelector('p strong').textContent = "Status: confirmed";
+                        this.style.display = 'none'; 
+                        this.parentElement.querySelector('.cancel-btn').style.display = 'none'; 
+                    }
+                })
+                .catch(err => showNotification('Chyba při potvrzení tisku', true));
+            });
+        });
+
+ 
+        document.querySelectorAll('.cancel-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const jobIndex = this.getAttribute('data-job');
+                fetch(`/cancel_print/${jobIndex}`, {
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        showNotification(data.error, true);
+                    } else {
+                        showNotification(data.message, false);
+                   
+                        this.parentElement.classList.remove('waiting');
+                        this.parentElement.classList.add('cancelled');
+                        this.parentElement.querySelector('p strong').textContent = "Status: cancelled";
+                        this.style.display = 'none'; 
+                        this.parentElement.querySelector('.confirm-btn').style.display = 'none';
+                    }
+                })
+                .catch(err => showNotification('Chyba při zrušení tisku', true));
+            });
+        });
+    </script>
+
+</body>
+</html>
